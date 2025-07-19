@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wzydev.mapper.RequisitionMapper">
+
+    <update id="updateById">
+        update requisition
+        <set>
+            <if test="userId != null">
+                user_id = #{userId},
+            </if>
+            <if test="supplyId != null">
+                supply_id = #{supplyId},
+            </if>
+            <if test="quantity != null">
+                quantity = #{quantity},
+            </if>
+             <if test="status != null">
+                status = #{status},
+            </if>
+        </set> where id = #{id}
+    </update>
+
+    <delete id="deleteByIds">
+        delete from requisition where id in
+        <foreach item="id" collection="ids" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="list" resultType="com.wzydev.pojo.Requisition">
+        SELECT
+        r.*,
+        u.name AS applicantName,
+        s.name AS supplyName
+        FROM
+        requisition r
+        LEFT JOIN
+        user_info u ON r.user_id = u.id
+        LEFT JOIN
+        supply_info s ON r.supply_id = s.id
+        <where>
+            <!-- 按申请人姓名查询 -->
+            <if test="applicantName != null and applicantName != ''">
+                u.name like concat('%', #{applicantName}, '%')
+            </if>
+            <!-- 按物资名称查询 -->
+            <if test="supplyName != null and supplyName != ''">
+                and s.name like concat('%', #{supplyName}, '%')
+            </if>
+            <!-- 按申请状态查询 -->
+            <if test="status != null">
+                and r.status = #{status}
+            </if>
+        </where>
+        ORDER BY r.update_time DESC
+    </select>
+
+    <select id="getById" resultType="com.wzydev.pojo.Requisition">
+        SELECT
+        r.*,
+        u.name AS applicantName,
+        s.name AS supplyName
+        FROM
+        requisition r
+        LEFT JOIN
+        user_info u ON r.user_id = u.id
+        LEFT JOIN
+        supply_info s ON r.supply_id = s.id
+        where r.id = #{id}
+    </select>
+
+</mapper>

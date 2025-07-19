@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wzydev.mapper.UserExprMapper">
+
+    <!--批量保存用户工作经历
+    foreach 标签：
+    collection：表示集合的名称
+    item：表示集合中的元素
+    separator：表示分隔符
+    -->
+    <insert id="insertBatch">
+        insert into user_expr(user_id, company, job, begin, end) values
+        <foreach collection="userExprList" item="userExpr" separator=",">
+            (#{userExpr.userId}, #{userExpr.company}, #{userExpr.job}, #{userExpr.begin}, #{userExpr.end})
+        </foreach>
+    </insert>
+    <!--注意上面这条sql不能把(和)放在foreach标签的open和close里，那样会导致最后生成错误的sql-->
+
+    <!--批量删除用户工作经历-->
+    <delete id="deleteByUserIds">
+        delete from user_expr where user_id in
+        <foreach collection="userIds" item="userId" separator="," open="(" close=")">
+            #{userId}
+        </foreach>
+    </delete>
+
+</mapper>

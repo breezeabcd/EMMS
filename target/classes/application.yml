@@ -1,0 +1,31 @@
+spring:
+  application:
+    name: EMMS
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/emms
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: asfwrvn42
+
+  servlet:
+    multipart:
+      #最大单个文件大小
+      max-file-size: 10MB
+      #最大总上传限制（包括所有文件和表单数据）
+      max-request-size: 100MB
+
+mybatis:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl  #日志输出
+    map-underscore-to-camel-case: true  #开启驼峰命名
+
+#阿里云OSS
+aliyun:
+  oss:
+    endpoint: https://oss-cn-beijing.aliyuncs.com
+    buketName: wzydev-emms
+    region: cn-beijing
+
+server:
+  port: 8081
