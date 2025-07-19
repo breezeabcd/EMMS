@@ -58,7 +58,7 @@ public class AdminController {
     }
 
     /**
-     * 新增管理员
+     * 新增管理员测试
      */
     @PostMapping
     public Result add(@RequestBody Admin admin) {  // @RequestBody注解表示将请求体中的json数据转换为Admin对象
